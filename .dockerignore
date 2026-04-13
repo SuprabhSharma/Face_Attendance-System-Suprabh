@@ -1,0 +1,22 @@
+# Dependencies
+venv/
+env/
+.env
+
+# Cache files
+__pycache__/
+*.pyc
+
+# DB
+database.db
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE
+.vscode/
+.idea/
