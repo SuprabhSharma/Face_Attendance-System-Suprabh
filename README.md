@@ -27,7 +27,7 @@ Technologies used:
 	•	Backend: Python (Flask)
 	•	Face Processing: OpenCV + FaceNet
 	•	Frontend: HTML, CSS, JavaScript
-	•	Database: SQLite / MySQL
+	•	Database: PostgrSQL
 
 ⸻
 
