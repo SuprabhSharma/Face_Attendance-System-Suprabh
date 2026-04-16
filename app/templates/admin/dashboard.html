@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - FaceAttend{% endblock %}
+
+{% block content %}
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('pageTitle').textContent = 'Admin Dashboard';
+    });
+</script>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <h2 class="fw-bold mb-1">Administrator Control Panel</h2>
+        <p class="text-muted mb-0">See all users, all attendance, and the configured administrator account details.</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted small mb-1">Total Users</p>
+                <h3 class="fw-bold mb-0">{{ users|length }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted small mb-1">Attendance Records</p>
+                <h3 class="fw-bold mb-0">{{ attendance_records|length }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <p class="text-muted small mb-1">Administrator Login</p>
+                <h3 class="fw-bold mb-0">{{ current_user.username }}</h3>
+                <small class="text-muted">{{ current_user.email }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">System Management</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Use the admin pages to inspect the database-backed records without opening SQLite directly.</p>
+                <div class="d-grid gap-2">
+                    <a class="btn btn-primary" href="{{ url_for('views.admin_users') }}">
+                        <i class="bi bi-people me-2"></i>View All Users
+                    </a>
+                    <a class="btn btn-info text-white" href="{{ url_for('views.admin_attendance') }}">
+                        <i class="bi bi-clipboard-data me-2"></i>View All Attendance
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 mb-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="mb-0 fw-bold">Administrator Details</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-2"><strong>Username:</strong> {{ current_user.username }}</p>
+                <p class="mb-2"><strong>Email:</strong> {{ current_user.email }}</p>
+                <p class="mb-2"><strong>Role:</strong> {{ current_user.role|capitalize }}</p>
+                <div class="alert alert-info mt-3 mb-0">
+                    Passwords are stored as hashes for security, so the raw admin password is not shown in the UI.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

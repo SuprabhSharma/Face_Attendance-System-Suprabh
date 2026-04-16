@@ -11,6 +11,12 @@ env/
 
 # Database
 database.db
+attendance_system.db
+*.db
+*.sqlite
+*.sqlite3
+attendance.csv
+logs/
 
 # OS generated files
 .DS_Store
