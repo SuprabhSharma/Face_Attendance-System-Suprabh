@@ -10,6 +10,9 @@ def create_app():
     
     app = Flask(__name__)
     
+    # 🔥 FIX: Session should not persist after browser close
+    app.config['SESSION_PERMANENT'] = False
+
     # Configure secret key for session management
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-change-in-production')
     
