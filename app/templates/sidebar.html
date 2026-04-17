@@ -2,7 +2,7 @@
 <nav id="appSidebar" class="sidebar bg-dark navbar-dark d-flex flex-column sticky-top">
     <!-- Brand -->
     <div class="sidebar-brand d-flex align-items-center px-3 py-4 border-bottom border-secondary">
-        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px; font-weight: bold; font-size: 1.5rem;">
+        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
             <i class="bi bi-camera-fill"></i>
         </div>
         <div>
@@ -12,61 +12,61 @@
     </div>
 
     {% if current_user.is_authenticated %}
-        <!-- Authenticated User Navigation -->
         <ul class="nav flex-column flex-grow-1 px-2 py-3">
-            <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'views.dashboard' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.dashboard') }}">
-                    <i class="bi bi-speedometer2 me-2"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'views.camera' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.camera') }}">
-                    <i class="bi bi-camera-video me-2"></i>
-                    <span>Mark Attendance</span>
-                </a>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link {% if request.endpoint == 'views.report' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.report') }}">
-                    <i class="bi bi-bar-chart me-2"></i>
-                    <span>Reports</span>
-                </a>
-            </li>
 
-            {% if current_user.role == 'admin' %}
-                <li class="nav-divider my-3"></li>
+            {% if current_user.role == 'user' %}
+
+                <!-- USER MENU -->
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'views.dashboard' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.dashboard') }}">
+                        <i class="bi bi-speedometer2 me-2"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'views.camera' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.camera') }}">
+                        <i class="bi bi-camera-video me-2"></i>
+                        <span>Mark Attendance</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link {% if request.endpoint == 'views.report' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.report') }}">
+                        <i class="bi bi-bar-chart me-2"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+
+            {% elif current_user.role == 'admin' %}
+
+                <!-- ADMIN MENU -->
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'views.admin_users' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.admin_users') }}">
                         <i class="bi bi-people me-2"></i>
                         <span>User Management</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'views.admin_dashboard' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.admin_dashboard') }}">
                         <i class="bi bi-shield-check me-2"></i>
                         <span>Admin Dashboard</span>
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {% if request.endpoint == 'views.admin_attendance' %}active bg-primary rounded{% endif %}" href="{{ url_for('views.admin_attendance') }}">
                         <i class="bi bi-clipboard-data me-2"></i>
                         <span>All Attendance</span>
                     </a>
                 </li>
-            {% elif current_user.role == 'manager' %}
-                <li class="nav-divider my-3"></li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="bi bi-people me-2"></i>
-                        <span>Team Reports</span>
-                    </a>
-                </li>
+
             {% endif %}
+
         </ul>
 
-        <!-- User Info in Sidebar Footer -->
+        <!-- User Info -->
         <div class="px-3 py-3 border-top border-secondary">
             <small class="text-muted d-block mb-2">Logged in as:</small>
             <div class="d-flex align-items-center">
@@ -74,8 +74,9 @@
                 <span class="text-white small fw-semibold">{{ current_user.username }}</span>
             </div>
         </div>
+
     {% else %}
-        <!-- Unauthenticated User Navigation -->
+        <!-- NOT LOGGED IN -->
         <ul class="nav flex-column flex-grow-1 px-2 py-3">
             <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.login') }}">
@@ -99,7 +100,6 @@
             </li>
         </ul>
 
-        <!-- Info in Sidebar Footer -->
         <div class="px-3 py-4 border-top border-secondary text-muted small">
             <div class="d-flex align-items-center">
                 <i class="bi bi-info-circle me-2"></i>
@@ -108,9 +108,3 @@
         </div>
     {% endif %}
 </nav>
-
-<style>
-.nav-divider {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-</style>
