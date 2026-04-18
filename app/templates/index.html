@@ -150,7 +150,7 @@
                 }
                 
                 // Calculate today's attendance
-                const today = new Date().toISOString().split('T')[0];
+                const today = new Date().toLocaleDateString('en-CA');
                 const todayCount = result.data.filter(r => r.date === today).length;
                 document.getElementById('todayAttendance').textContent = todayCount;
                 document.getElementById('attendanceDate').textContent = new Date(today).toLocaleDateString();

@@ -218,8 +218,8 @@
     }
 
     function updateStatistics() {
-        const today = new Date().toISOString().split('T')[0];
-        const thisMonth = new Date().toISOString().slice(0, 7);
+        const today = new Date().toLocaleDateString('en-CA'); 
+        const thisMonth = new Date().toLocaleDateString('en-CA').slice(0, 7);
         
         const todayCount = allRecords.filter(r => r.date === today).length;
         const thisMonthCount = allRecords.filter(r => r.date.startsWith(thisMonth)).length;

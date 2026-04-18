@@ -4,6 +4,9 @@ import json
 import os
 from hashlib import pbkdf2_hmac
 
+# ✅ IST TIMEZONE (ADD THIS)
+IST = timezone(timedelta(hours=5, minutes=30))
+
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'attendance_system.db')
 
 def get_db_connection():
@@ -292,15 +295,15 @@ def ensure_default_admin():
 def _normalize_attendance_datetime(attendance_date=None, attendance_time=None):
     """Normalize attendance inputs to a timezone-aware UTC datetime plus date/time strings."""
     if attendance_date is None:
-        normalized_datetime = datetime.now(timezone.utc)
+        normalized_datetime = datetime.now(IST)
     elif isinstance(attendance_date, datetime):
-        normalized_datetime = attendance_date.astimezone(timezone.utc)
+        normalized_datetime = attendance_date.astimezone(IST)
     elif attendance_time:
         normalized_datetime = datetime.strptime(
             f'{attendance_date} {attendance_time}', '%Y-%m-%d %H:%M:%S'
-        ).replace(tzinfo=timezone.utc)
+        ).replace(tzinfo=IST)
     else:
-        normalized_datetime = datetime.strptime(attendance_date, '%Y-%m-%d').replace(tzinfo=timezone.utc)
+        normalized_datetime = datetime.strptime(attendance_date, '%Y-%m-%d').replace(tzinfo=IST)
 
     return (
         normalized_datetime,
@@ -423,7 +426,7 @@ def get_all_attendance_admin(limit=500):
 
 def get_attendance_today():
     """Get today's attendance records"""
-    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    today = datetime.now(IST).strftime('%Y-%m-%d')
     conn = get_db_connection()
     c = conn.cursor()
     c.execute('''
@@ -489,7 +492,7 @@ def generate_daily_report(user_id, report_date):
         'present': present,
         'late': late,
         'absent': 1 - (present or late),
-        'generated_at': datetime.now(timezone.utc).isoformat()
+        'generated_at': datetime.now(IST).isoformat()
     }
     
     c.execute('''
