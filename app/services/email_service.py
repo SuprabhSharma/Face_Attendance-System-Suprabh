@@ -20,42 +20,52 @@ class EmailService:
         self.sender_password = os.getenv('SENDER_PASSWORD')
         self.sender_name = 'FaceAttend System'
         
-    def send_email(self, recipient_email, subject, html_content, user_id=None):
-        """Send email to recipient"""
-        try:
-            if not self.sender_email or not self.sender_password:
-                logger.warning('Email credentials not configured')
-                return False
-            
-            # Create email
-            msg = MIMEMultipart('alternative')
-            msg['Subject'] = subject
-            msg['From'] = f'{self.sender_name} <{self.sender_email}>'
-            msg['To'] = recipient_email
-            
-            # Attach HTML
-            msg.attach(MIMEText(html_content, 'html'))
-            
-            # Log notification
-            notification_id = log_email_notification(user_id, 'general', recipient_email, subject) if user_id else None
-            
-            # Send email
-            with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
-                server.starttls()
-                server.login(self.sender_email, self.sender_password)
-                server.send_message(msg)
-            
-            if notification_id:
-                update_email_notification_status(notification_id, 'sent')
-            
-            logger.info(f'Email sent to {recipient_email}')
-            return True
-            
-        except Exception as e:
-            logger.error(f'Error sending email: {str(e)}')
-            if notification_id:
-                update_email_notification_status(notification_id, 'failed', str(e)[:500])
+def send_email(self, recipient_email, subject, html_content, user_id=None):
+    """Send email to recipient"""
+    
+    notification_id = None   # ✅ FIX 1
+    
+    try:
+        if not self.sender_email or not self.sender_password:
+            print("EMAIL NOT CONFIGURED:", self.sender_email, self.sender_password)  # ✅ FIX 2
+            logger.warning('Email credentials not configured')
             return False
+        
+        print("Sending email to:", recipient_email)  # ✅ DEBUG
+        
+        # Create email
+        msg = MIMEMultipart('alternative')
+        msg['Subject'] = subject
+        msg['From'] = f'{self.sender_name} <{self.sender_email}>'
+        msg['To'] = recipient_email
+        
+        # Attach HTML
+        msg.attach(MIMEText(html_content, 'html'))
+        
+        # Log notification
+        notification_id = log_email_notification(user_id, 'general', recipient_email, subject) if user_id else None
+        
+        # Send email
+        with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
+            server.starttls()
+            server.login(self.sender_email, self.sender_password)
+            server.send_message(msg)
+        
+        if notification_id:
+            update_email_notification_status(notification_id, 'sent')
+        
+        print("EMAIL SENT SUCCESSFULLY")  # ✅ DEBUG
+        logger.info(f'Email sent to {recipient_email}')
+        return True
+        
+    except Exception as e:
+        print("EMAIL ERROR:", str(e))  # ✅ FIX 3
+        logger.error(f'Error sending email: {str(e)}')
+        
+        if notification_id:
+            update_email_notification_status(notification_id, 'failed', str(e)[:500])
+        
+        return False
     
     def send_attendance_marked_email(self, user_id, user_email, user_name, attendance_time, attendance_date, user_data):
         """Send email when attendance is marked"""
