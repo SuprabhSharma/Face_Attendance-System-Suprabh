@@ -1,6 +1,7 @@
 # Dependencies
 venv/
 env/
+newenv/
 .env
 
 # Cache files
