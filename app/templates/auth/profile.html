@@ -3,219 +3,169 @@
 {% block title %}My Profile - FaceAttend System{% endblock %}
 
 {% block content %}
+
 <div class="container-fluid py-4">
-    <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="page-title mb-0">
-                    <i class="bi bi-person-circle me-2"></i> My Profile
-                </h1>
-                <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline-primary">
-                    <i class="bi bi-key me-2"></i> Change Password
-                </a>
-            </div>
-        </div>
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="fw-bold">
+            <i class="bi bi-person-circle me-2 text-primary"></i> My Profile
+        </h2>
+        <a href="{{ url_for('auth.change_password') }}" class="btn btn-primary shadow-sm">
+            <i class="bi bi-key me-1"></i> Change Password
+        </a>
     </div>
 
-    <!-- Alerts -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert alert-{{ 'danger' if category == 'error' else 'success' }} alert-dismissible fade show" role="alert">
-                    <i class="bi bi-{% if category == 'error' %}exclamation-circle{% else %}check-circle{% endif %} me-2"></i>
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    <div class="row g-4">
 
-    <div class="row">
-        <!-- Profile Information -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-gradient border-0 py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-info-circle me-2 text-primary"></i> Account Information
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="profile-item mb-3">
-                        <label class="text-muted small text-uppercase">Full Name</label>
-                        <p class="fw-semibold mb-0">{{ user.full_name }}</p>
-                    </div>
-                    <hr>
-                    <div class="profile-item mb-3">
-                        <label class="text-muted small text-uppercase">Username</label>
-                        <p class="fw-semibold mb-0">{{ user.username }}</p>
-                    </div>
-                    <hr>
-                    <div class="profile-item mb-3">
-                        <label class="text-muted small text-uppercase">Email Address</label>
-                        <p class="fw-semibold mb-0">
-                            <i class="bi bi-envelope me-1"></i>
-                            {{ user.email }}
-                            {% if user.is_verified %}
-                                <span class="badge bg-success ms-2">Verified</span>
-                            {% else %}
-                                <span class="badge bg-warning ms-2">Unverified</span>
-                            {% endif %}
-                        </p>
-                    </div>
-                    <hr>
-                    <div class="profile-item mb-3">
-                        <label class="text-muted small text-uppercase">Role</label>
-                        <p class="fw-semibold mb-0">
-                            {% if user.role == 'admin' %}
-                                <span class="badge bg-danger">Administrator</span>
-                            {% elif user.role == 'manager' %}
-                                <span class="badge bg-info">Manager</span>
-                            {% else %}
-                                <span class="badge bg-primary">Employee</span>
-                            {% endif %}
-                        </p>
-                    </div>
-                    <hr>
-                    <div class="profile-item">
-                        <label class="text-muted small text-uppercase">Account Status</label>
-                        <p class="fw-semibold mb-0">
-                            {% if user.status == 'active' %}
-                                <span class="badge bg-success">Active</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Inactive</span>
-                            {% endif %}
-                        </p>
-                    </div>
+        <!-- USER INFO -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body p-4">
+                    <h5 class="mb-3 text-primary fw-semibold">User Information</h5>
+
+                    <div class="mb-2"><strong>Name:</strong> {{ user.full_name }}</div>
+                    <div class="mb-2"><strong>Username:</strong> {{ user.username }}</div>
+                    <div class="mb-2"><strong>Email:</strong> {{ user.email }}</div>
+
                 </div>
             </div>
         </div>
 
-        <!-- Attendance Statistics -->
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-header bg-gradient border-0 py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-bar-chart me-2 text-success"></i> Attendance Summary
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="stats-grid">
-                        <div class="stat-box text-center mb-3">
-                            <div class="stat-value text-success">
-                                <i class="bi bi-check-circle fs-3"></i>
+        <!-- ATTENDANCE SUMMARY -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-lg rounded-4 h-100">
+                <div class="card-body p-4 text-center">
+
+                    <h5 class="mb-4 fw-semibold text-primary">Attendance Summary</h5>
+
+                    <div class="row text-center">
+
+                        <div class="col">
+                            <div class="p-3 rounded-3 bg-success-subtle">
+                                <h3 id="presentCount" class="fw-bold text-success">0</h3>
+                                <small>Present</small>
                             </div>
-                            <p class="stat-label text-muted">Present</p>
-                            <p class="stat-number fw-bold fs-5">0</p>
                         </div>
-                        <div class="stat-box text-center mb-3">
-                            <div class="stat-value text-warning">
-                                <i class="bi bi-exclamation-circle fs-3"></i>
+
+                        <div class="col">
+                            <div class="p-3 rounded-3 bg-warning-subtle">
+                                <h3 id="lateCount" class="fw-bold text-warning">0</h3>
+                                <small>Late</small>
                             </div>
-                            <p class="stat-label text-muted">Late</p>
-                            <p class="stat-number fw-bold fs-5">0</p>
                         </div>
-                        <div class="stat-box text-center mb-3">
-                            <div class="stat-value text-danger">
-                                <i class="bi bi-x-circle fs-3"></i>
+
+                        <div class="col">
+                            <div class="p-3 rounded-3 bg-danger-subtle">
+                                <h3 id="absentCount" class="fw-bold text-danger">0</h3>
+                                <small>Absent</small>
                             </div>
-                            <p class="stat-label text-muted">Absent</p>
-                            <p class="stat-number fw-bold fs-5">0</p>
                         </div>
+
                     </div>
 
-                    <hr class="my-4">
+                    <hr>
 
-                    <div class="info-box bg-light p-3 rounded">
-                        <small class="text-muted">
-                            <i class="bi bi-info-circle me-2"></i>
-                            Last attendance marked on: <strong>Not available</strong>
-                        </small>
-                    </div>
+                    <p class="mb-0">
+                        Last Attendance:
+                        <strong id="lastAttendance" class="text-dark">Not available</strong>
+                    </p>
+
                 </div>
             </div>
         </div>
+
     </div>
 
-    <!-- Recent Attendance Records -->
-    <div class="row">
+    <!-- RECENT ATTENDANCE -->
+    <div class="row mt-4">
         <div class="col-12">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-gradient border-0 py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="bi bi-calendar-check me-2 text-info"></i> Recent Attendance Records
-                    </h5>
-                </div>
-                <div class="card-body">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-4">
+
+                    <h5 class="mb-3 fw-semibold text-primary">Recent Attendance</h5>
+
                     <div class="table-responsive">
-                        <table class="table table-hover mb-0">
-                            <thead>
-                                <tr class="border-bottom">
-                                    <th class="text-muted small text-uppercase">Date</th>
-                                    <th class="text-muted small text-uppercase">Check-in</th>
-                                    <th class="text-muted small text-uppercase">Check-out</th>
-                                    <th class="text-muted small text-uppercase">Status</th>
-                                    <th class="text-muted small text-uppercase">Notes</th>
+                        <table class="table align-middle table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody id="attendanceTableBody">
                                 <tr>
-                                    <td colspan="5" class="text-center text-muted py-4">
-                                        <i class="bi bi-inbox"></i> No attendance records yet
-                                    </td>
+                                    <td colspan="3" class="text-center">Loading...</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <style>
-.profile-item {
-    display: flex;
-    flex-direction: column;
+.card {
+    transition: all 0.3s ease;
 }
-
-.profile-item label {
-    font-weight: 600;
-    margin-bottom: 5px;
+.card:hover {
+    transform: translateY(-5px);
 }
-
-.stat-box {
-    padding: 15px;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #eee;
-}
-
-.stat-value {
-    margin-bottom: 10px;
-}
-
-.stat-label {
-    font-size: 0.85rem;
-    margin-bottom: 5px;
-}
-
-.stat-number {
-    font-size: 1.5rem;
-    color: #1f2937;
-}
-
-.bg-gradient {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.card-header.bg-gradient .card-title {
-    color: white;
-}
-
-.info-box {
-    border-left: 4px solid #667eea;
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
 }
 </style>
+
+<script>
+async function loadProfileData() {
+    try {
+        const res = await fetch('/api/attendance');
+        const result = await res.json();
+
+        if (!result.success) return;
+
+        const records = result.data || [];
+
+        document.getElementById("presentCount").innerText = records.length;
+        document.getElementById("lateCount").innerText = 0;
+        document.getElementById("absentCount").innerText = 0;
+
+        if (records.length > 0) {
+            const last = records[0];
+            document.getElementById("lastAttendance").innerText =
+                last.date + " " + (last.time || last.time_in || "");
+        }
+
+        const tableBody = document.getElementById("attendanceTableBody");
+
+        if (records.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="3" class="text-center">No records</td>
+                </tr>
+            `;
+            return;
+        }
+
+        tableBody.innerHTML = records.slice(0, 5).map(r => `
+            <tr>
+                <td>${r.date}</td>
+                <td>${r.time || r.time_in || '--'}</td>
+                <td><span class="badge bg-success">Present</span></td>
+            </tr>
+        `).join("");
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadProfileData);
+</script>
+
 {% endblock %}

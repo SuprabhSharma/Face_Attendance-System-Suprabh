@@ -138,10 +138,11 @@ def recognize():
                     'found': True,
                     'user_id': user_id,
                     'user_name': user_data['full_name'],
+                    'user_email': user_data['email'], 
                     'status': status,
                     'marked_at': attendance_time,
                     'message': f"{user_data['full_name']} marked at {attendance_time} IST"
-                })
+                })      
             else:
                 return jsonify({
                     'success': True,
