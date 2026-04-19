@@ -19,11 +19,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy all files
+# Copy project
 COPY . .
 
-# Hugging Face uses port 7860
-EXPOSE 7860
-
-# Run app
-CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--timeout", "120", "--workers", "2", "run:app"]
+# Render uses dynamic port
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --timeout 120 --workers 2 run:app"]
